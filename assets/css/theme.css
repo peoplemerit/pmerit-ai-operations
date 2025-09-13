@@ -1,0 +1,30 @@
+/*
+PMERIT AI PLATFORM: THEME CSS
+Light/dark mode overrides if using .dark class
+*/
+
+/* This file is optional as dark mode styles are already included in brand.css */
+/* You can add additional theme variations here if needed */
+
+.theme-high-contrast {
+  --primary: #000000;
+  --primary-dark: #333333;
+  --accent: #FF9900;
+  --success: #00CC00;
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --text-inverse: #FFFFFF;
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #EEEEEE;
+  --card-bg: #FFFFFF;
+  --border-color: #000000;
+}
+
+.theme-high-contrast.dark {
+  --text-primary: #FFFFFF;
+  --text-secondary: #CCCCCC;
+  --bg-primary: #000000;
+  --bg-secondary: #222222;
+  --card-bg: #111111;
+  --border-color: #FFFFFF;
+}
