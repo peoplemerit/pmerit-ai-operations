@@ -5,40 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PMERIT — Accessible Global Education</title>
 
-  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-
-  <!-- Stylesheets (phase 2 will provide these) -->
-  <link rel="stylesheet" href="/assets/css/brand.css">
-  <link rel="stylesheet" href="/assets/css/base.css">
-  <link rel="stylesheet" href="/assets/css/components.css">
-  <link rel="stylesheet" href="/assets/css/theme.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
 </head>
-<body style="margin:0;padding:0;overflow:hidden;font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Noto Sans;">
-  <div id="headerContainer"></div>
-  <div id="bodyContainer"></div>
-  <div id="footerContainer"></div>
+<body>
+  <div class="main-layout">
+    <div id="header-container" class="header-container"></div>
+    <div id="nav-container" class="nav-container"></div>
+    <div id="main-content" class="main-content"></div>
+    <div id="right-panel" class="right-panel"></div>
+    <div id="footer-container" class="footer-container"></div>
+  </div>
 
-  <!-- Inline boot loader so Phase 1 works immediately -->
-  <script>
-    Promise.all([
-      fetch('/partials/header.html').then(r => r.text()).then(h => { document.getElementById('headerContainer').innerHTML = h; }),
-      fetch('/partials/body.html').then(r => r.text()).then(h => { document.getElementById('bodyContainer').innerHTML = h; }),
-      fetch('/partials/footer.html').then(r => r.text()).then(h => { document.getElementById('footerContainer').innerHTML = h; })
-    ]).then(() => {
-      // Minimal placeholder so the UI is usable until Phase 3 scripts are added.
-      // Character counter
-      const chatInput = document.getElementById('chatInput');
-      const count = document.getElementById('count');
-      if (chatInput && count) {
-        const update = () => { count.textContent = `${chatInput.value.length}/1000`; };
-        chatInput.addEventListener('input', update);
-        update();
-      }
-    });
-  </script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/chat.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
