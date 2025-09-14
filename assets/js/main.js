@@ -1,17 +1,12 @@
-// --- Hardened event sequencing: idempotent PMERIT_INIT boot after partials ---
+// --- Idempotent PMERIT_INIT boot after partials ---
 (function(){
-  // Only run initialization after partials are injected.
   function safeInit(){
     try {
-      if (typeof window.PMERIT_INIT === 'function') {
-        window.PMERIT_INIT();
-      }
+      if (typeof window.PMERIT_INIT === 'function') window.PMERIT_INIT();
     } catch(e) {
       console.error("[main.js] Error running PMERIT_INIT:", e);
     }
   }
-
-  // Fast path: already ready
   if (document.documentElement.dataset.partialsReady === '1') {
     safeInit();
   } else {
@@ -22,11 +17,8 @@
 (function () {
   window.state = { auth:false, dark:false, vh:false, support:false, tts:false, lang:'en' };
 
-  // Null-safe helper for element lookup
   const $ = (id) => {
-    try {
-      return document.getElementById(id) || null;
-    } catch { return null; }
+    try { return document.getElementById(id) || null; } catch { return null; }
   };
 
   const TRACKS = [
@@ -145,19 +137,13 @@
   }
 
   function wireEvents(){
-    // Core toggles
-    $('darkToggle')?.addEventListener('click', ()=>setDark(!state.dark));
-    $('ttsToggle')?.addEventListener('click',  ()=>setTTS(!state.tts));
-    $('supportToggle')?.addEventListener('click', ()=>setSupport(!state.support));
-    $('supportShort')?.addEventListener('click', ()=>setSupport(true));
+    // --- Left panel toggles ---
     $('vhToggle')?.addEventListener('click', ()=>setVH(!state.vh));
-    $('vhQuick')?.addEventListener('click', ()=>setVH(true));
-    $('vhShort')?.addEventListener('click', ()=>setVH(true));
-
-    // Mobile quick actions
-    $('m_vhToggle')?.addEventListener('click', ()=>setVH(!state.vh));
-    $('m_supportToggle')?.addEventListener('click', ()=>setSupport(!state.support));
-    $('m_settings')?.addEventListener('click', ()=>alert(`Settings: Dark Mode: ${state.dark?'On':'Off'}, TTS: ${state.tts?'On':'Off'}`));
+    $('careerPaths')?.addEventListener('click', ()=>{
+      renderTracks();
+      $('tracksModal')?.showModal?.();
+    });
+    $('supportToggle')?.addEventListener('click', ()=>setSupport(!state.support));
 
     // Settings collapsible
     const box = $('settingsBox');
@@ -169,6 +155,18 @@
       const ico = head.querySelector('i.fas');
       if (ico) ico.className = open ? 'fas fa-sliders-h' : 'fas fa-chevron-down';
     });
+
+    // --- Other toggles and actions ---
+    $('darkToggle')?.addEventListener('click', ()=>setDark(!state.dark));
+    $('ttsToggle')?.addEventListener('click', ()=>setTTS(!state.tts));
+    $('supportShort')?.addEventListener('click', ()=>setSupport(true));
+    $('vhQuick')?.addEventListener('click', ()=>setVH(true));
+    $('vhShort')?.addEventListener('click', ()=>setVH(true));
+
+    // Mobile quick actions
+    $('m_vhToggle')?.addEventListener('click', ()=>setVH(!state.vh));
+    $('m_supportToggle')?.addEventListener('click', ()=>setSupport(!state.support));
+    $('m_settings')?.addEventListener('click', ()=>alert(`Settings: Dark Mode: ${state.dark?'On':'Off'}, TTS: ${state.tts?'On':'Off'}`));
 
     // Auth / dashboard
     $('dashBtn')?.addEventListener('click', goDashboard);
@@ -223,13 +221,12 @@
       }
     });
 
-    // Career paths — render then open dialog
-    function openTracks(){
+    // Mobile career paths
+    $('m_careerPaths')?.addEventListener('click', ()=>{
       renderTracks();
       $('tracksModal')?.showModal?.();
-    }
-    $('careerPaths')?.addEventListener('click', openTracks);
-    $('m_careerPaths')?.addEventListener('click', openTracks);
+    });
+
     $('tracksClose')?.addEventListener('click', ()=>$('tracksModal')?.close?.());
 
     // Voices + footer
@@ -267,7 +264,6 @@
   }
 
   function init(){
-    // Only wire events and set state if body partials are present
     if (!$('body-container')) return;
     initState();
     wireEvents();
