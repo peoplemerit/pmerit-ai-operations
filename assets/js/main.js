@@ -1,3 +1,13 @@
+// --- start AFTER partials are injected ---
+if (document.documentElement.getAttribute('data-partials-ready') === '1') {
+  // Partials already ready (fast path in hot reload / cache hit)
+  try { typeof PMERIT_INIT === 'function' ? PMERIT_INIT() : init?.(); } catch {}
+} else {
+  document.addEventListener('partials:ready', () => {
+    try { typeof PMERIT_INIT === 'function' ? PMERIT_INIT() : init?.(); } catch (e) { console.error(e); }
+  }, { once: true });
+}
+
 // assets/js/main.js
 // Wire events AFTER partials are injected. Guards everywhere; no crashes.
 (function () {
