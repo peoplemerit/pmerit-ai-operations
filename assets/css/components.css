@@ -100,3 +100,17 @@ textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.1);border-color
   footer{ row-gap: .5rem; }
   .footer-links{ gap: .75rem; }
 }
+/* --- Mobile polish to mirror blueprint feel --- */
+@media (max-width:1100px){
+  .mobile-card{ padding:.875rem; gap:.4rem; min-height:78px; }
+  .mobile-accordion summary{
+    position:relative; padding-right:2.25rem;
+  }
+  .mobile-accordion summary::after{
+    content:"▾"; position:absolute; right:.95rem; top:50%; transform:translateY(-50%);
+    font-size:1rem; color:var(--text-secondary);
+  }
+  .mobile-accordion[open] summary::after{ content:"▴"; }
+  footer{ flex-direction:column; gap:.75rem; padding:1rem; }
+  .footer-links{ flex-wrap:wrap; justify-content:center; gap:.75rem; }
+}
