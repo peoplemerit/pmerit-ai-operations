@@ -139,12 +139,12 @@
 
   function wireEvents(){
     // --- Left panel toggles ---
-    $('vhToggle')?.addEventListener('click', ()=>setVH(!$('vhToggle').classList.contains('active')));
+    $('vhToggle')?.addEventListener('click', ()=>setVH(!state.vh));
     $('careerPaths')?.addEventListener('click', ()=>{
       renderTracks();
       $('tracksModal')?.showModal?.();
     });
-    $('supportToggle')?.addEventListener('click', ()=>setSupport(!$('supportToggle').classList.contains('active')));
+    $('supportToggle')?.addEventListener('click', ()=>setSupport(!state.support));
 
     // Settings collapsible (show/hide settings body, toggle icon)
     const box = $('settingsBox');
@@ -204,6 +204,7 @@
     $('startBtn')?.addEventListener('click', openAssessment);
     $('beginAssessment')?.addEventListener('click', openAssessment);
     $('m_beginAssessment')?.addEventListener('click', openAssessment);
+    $('assessmentBtn')?.addEventListener('click', openAssessment);
     $('assessmentCancel')?.addEventListener('click', ()=>$('assessmentModal')?.close?.());
     $('assessmentStart')?.addEventListener('click', ()=>{
       $('assessmentModal')?.close?.();
@@ -248,6 +249,11 @@
     $('contactBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','You can contact our support team through this chat interface, or reach out via email at support@pmerit.co.'));
     $('partnershipsBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT partners with leading educational institutions and industry organizations to provide comprehensive learning experiences. Interested? Let us know!'));
     $('supportBtn')?.addEventListener('click', ()=>{ setSupport(true); window.PMERIT_CHAT?.addMessage('PMERIT AI',"Support mode activated! I'm now ready to help you with any technical issues, account questions, or course recommendations.") });
+    
+    // About PMERIT buttons
+    $('aboutBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT is dedicated to providing accessible, high-quality education that opens doors to endless opportunities. We offer personalized learning paths, career guidance, and support to help you achieve your goals. Our mission is to empower learners worldwide with the skills they need to succeed in today\'s digital economy.'));
+    $('aboutBtnRight')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT is dedicated to providing accessible, high-quality education that opens doors to endless opportunities. We offer personalized learning paths, career guidance, and support to help you achieve your goals. Our mission is to empower learners worldwide with the skills they need to succeed in today\'s digital economy.'));
+    $('readAbout')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT is dedicated to providing accessible, high-quality education that opens doors to endless opportunities. We offer personalized learning paths, career guidance, and support to help you achieve your goals. Our mission is to empower learners worldwide with the skills they need to succeed in today\'s digital economy.'));
 
     const tips=[
       "Pro tip: Keep notes in your own words for better recall.",
