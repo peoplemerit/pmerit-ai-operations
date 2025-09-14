@@ -1,28 +1,30 @@
 // assets/js/boot-includes.js
-// Loads header/body/footer partials, then signals main.js to initialize.
+// Load header/body/footer partials, then signal main init. Robust to network/cache.
 
 (async function () {
   async function loadPartial(targetId, url) {
     const host = document.getElementById(targetId);
     if (!host) return;
     const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`Failed to load ${url}`);
+    if (!res.ok) throw new Error(`Failed to load ${url}: ${res.status}`);
     host.innerHTML = await res.text();
   }
 
   async function boot() {
-    // Load the three partials
-    await Promise.all([
-      loadPartial("header-container", "partials/header.html"),
-      loadPartial("body-container", "partials/body.html"),
-      loadPartial("footer-container", "partials/footer.html"),
-    ]);
+    try {
+      await Promise.all([
+        loadPartial("header-container", "partials/header.html"),
+        loadPartial("body-container",   "partials/body.html"),
+        loadPartial("footer-container", "partials/footer.html"),
+      ]);
+    } catch (e) {
+      console.error(e);
+    }
 
-    // Tell main.js it's safe to wire up the UI now
+    // Prefer direct call; fall back to event for safety
     if (typeof window.PMERIT_INIT === "function") {
       window.PMERIT_INIT();
     } else {
-      // Fallback: dispatch an event if main.js hasn't attached yet
       document.dispatchEvent(new Event("partials:loaded"));
     }
   }
