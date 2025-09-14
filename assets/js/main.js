@@ -1,19 +1,3 @@
-// --- Idempotent PMERIT_INIT boot after partials ---
-(function(){
-  function safeInit(){
-    try {
-      if (typeof window.PMERIT_INIT === 'function') window.PMERIT_INIT();
-    } catch(e) {
-      console.error("[main.js] Error running PMERIT_INIT:", e);
-    }
-  }
-  if (document.documentElement.dataset.partialsReady === '1') {
-    safeInit();
-  } else {
-    document.addEventListener('partials:ready', safeInit, { once: true });
-  }
-})();
-
 (function () {
   window.state = { auth:false, dark:false, vh:false, support:false, tts:false, lang:'en' };
 
