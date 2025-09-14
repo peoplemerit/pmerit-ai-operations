@@ -114,6 +114,7 @@
     const detail = $('trackDetail');
     if (!list || !detail) return;
     list.innerHTML = '';
+    detail.style.display = "none";
     TRACKS.forEach(t=>{
       const card = document.createElement('div');
       card.className = 'track-card';
@@ -138,23 +139,26 @@
 
   function wireEvents(){
     // --- Left panel toggles ---
-    $('vhToggle')?.addEventListener('click', ()=>setVH(!state.vh));
+    $('vhToggle')?.addEventListener('click', ()=>setVH(!$('vhToggle').classList.contains('active')));
     $('careerPaths')?.addEventListener('click', ()=>{
       renderTracks();
       $('tracksModal')?.showModal?.();
     });
-    $('supportToggle')?.addEventListener('click', ()=>setSupport(!state.support));
+    $('supportToggle')?.addEventListener('click', ()=>setSupport(!$('supportToggle').classList.contains('active')));
 
-    // Settings collapsible
+    // Settings collapsible (show/hide settings body, toggle icon)
     const box = $('settingsBox');
     const head = box?.querySelector('.head'), body = box?.querySelector('.body');
-    head?.addEventListener('click', ()=>{
-      if (!body || !head) return;
-      const open = body.style.display === 'block';
-      body.style.display = open ? 'none' : 'block';
-      const ico = head.querySelector('i.fas');
-      if (ico) ico.className = open ? 'fas fa-sliders-h' : 'fas fa-chevron-down';
-    });
+    if (head && body) {
+      // Always start hidden
+      body.style.display = "none";
+      head.addEventListener('click', ()=>{
+        const open = body.style.display === 'block';
+        body.style.display = open ? 'none' : 'block';
+        const ico = head.querySelector('i.fas');
+        if (ico) ico.className = open ? 'fas fa-sliders-h' : 'fas fa-chevron-down';
+      });
+    }
 
     // --- Other toggles and actions ---
     $('darkToggle')?.addEventListener('click', ()=>setDark(!state.dark));
