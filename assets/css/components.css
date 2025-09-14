@@ -131,6 +131,7 @@
   box-shadow: var(--shadow-lg);
   overflow: hidden;
 }
+
 .panel-head {
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
@@ -161,50 +162,35 @@
 .badge.vh {
   background-color: var(--accent);
 }
+
+/* --- Chat area layout fix --- */
 #textChat {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
+  flex: 1 1 0;
+  position: relative;
 }
 .chat-body {
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
   padding: 1rem;
-  overflow: auto;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: .9rem;
-}
-.bubble {
-  display: flex;
-  gap: .65rem;
-  align-items: flex-start;
-  background-color: rgba(37,99,235,.06);
-  border: 1px solid rgba(37,99,235,.18);
-  border-radius: .75rem;
-  padding: 1rem;
-}
-.ava {
-  min-width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  background: linear-gradient(135deg,var(--primary),var(--accent));
-}
-.bubble h3 {
-  margin: .1rem 0 .35rem;
-  color: var(--primary);
-  font-size: 1rem;
-}
-.bubble p {
-  margin: .3rem 0;
-  line-height: 1.55;
+  background: none;
 }
 .chat-input {
   border-top: 1px solid var(--border-color);
   background-color: var(--bg-secondary);
   padding: .75rem;
+  /* Fix: keep at bottom, don't shrink */
+  flex: 0 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
 }
 textarea {
   width: 100%;
@@ -346,13 +332,13 @@ textarea:focus {
 }
 #right h3::after {
   content: "";
-  position: absolute;
   left: 0;
   bottom: 0;
   width: 40px;
   height: 3px;
   background-color: var(--primary);
   border-radius: 2px;
+  position: absolute;
 }
 .discover {
   background-color: var(--card-bg);
