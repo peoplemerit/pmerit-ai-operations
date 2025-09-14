@@ -78,3 +78,25 @@ textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.1);border-color
 @media (min-width:1101px){
   #mobileAccordions{display:none;}
 }
+
+/* --- Mobile polish to mirror blueprint JPG --- */
+@media (max-width:1100px){
+  /* Slightly denser cards for a tighter fold */
+  .mobile-card{ padding: .875rem; gap: .4rem; min-height: 78px; }
+
+  /* Make summary affordance clearer without default triangles */
+  .mobile-accordion summary{
+    position: relative;
+    padding-right: 2.25rem; /* room for arrow */
+  }
+  .mobile-accordion summary::after{
+    content: "▾";
+    position: absolute; right: .95rem; top: 50%; transform: translateY(-50%);
+    font-size: 1rem; color: var(--text-secondary);
+  }
+  .mobile-accordion[open] summary::after{ content: "▴"; }
+
+  /* Footer stacking: keep badges readable when cramped */
+  footer{ row-gap: .5rem; }
+  .footer-links{ gap: .75rem; }
+}
