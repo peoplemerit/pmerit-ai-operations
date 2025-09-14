@@ -1,21 +1,21 @@
-<!-- /partials/body.html (replacement) -->
+<!-- partials/body.html (full replacement) -->
 <div class="estate">
   <!-- Left Pane -->
   <aside id="left" aria-label="Quick actions sidebar">
     <section>
       <div class="pane-title">Quick Actions</div>
 
-      <button class="toggle" id="vhToggle" type="button">
+      <button class="toggle" id="vhToggle">
         <span><i class="fas fa-user-astronaut icon"></i> Virtual Human Mode</span>
         <span class="switch" aria-hidden="true"></span>
       </button>
 
-      <button class="action" id="careerPaths" type="button">
+      <button class="action" id="careerPaths">
         <span><i class="fas fa-compass icon"></i> Career Track &amp; Explore Paths</span>
         <i class="fas fa-chevron-right" aria-hidden="true"></i>
       </button>
 
-      <button class="toggle" id="supportToggle" type="button">
+      <button class="toggle" id="supportToggle">
         <span><i class="fas fa-headset icon"></i> Customer Service Mode</span>
         <span class="switch" aria-hidden="true"></span>
       </button>
@@ -26,21 +26,22 @@
           <i class="fas fa-chevron-down"></i>
         </div>
         <div class="body">
-          <button class="toggle" id="darkToggle" type="button">
+          <button class="toggle" id="darkToggle">
             <span><i class="fas fa-moon icon"></i> Dark Mode</span>
             <span class="switch" aria-hidden="true"></span>
           </button>
-          <button class="toggle" id="ttsToggle" type="button">
+          <button class="toggle" id="ttsToggle">
             <span><i class="fas fa-volume-up icon"></i> Text-to-Speech</span>
             <span class="switch" aria-hidden="true"></span>
           </button>
-          <button class="action" id="voicesBtn" type="button">
+          <button class="action" id="voicesBtn">
             <span><i class="fas fa-headphones icon"></i> Preview Voices</span>
             <i class="fas fa-chevron-right"></i>
           </button>
         </div>
       </div>
 
+      <!-- Single Dashboard button -->
       <button class="dashboard guest" id="dashBtn" type="button">
         <i class="fas fa-gauge-high"></i> Dashboard
       </button>
@@ -56,8 +57,12 @@
     <section class="panel" aria-label="Chat panel">
       <div class="panel-head">
         <div class="badges">
-          <span class="badge vh" id="vhBadge" style="display:none"><i class="fas fa-user-astronaut"></i> Virtual Human</span>
-          <span class="badge support" id="supportBadge" style="display:none"><i class="fas fa-headset"></i> Support Assistant</span>
+          <span class="badge vh" id="vhBadge" style="display:none">
+            <i class="fas fa-user-astronaut"></i> Virtual Human
+          </span>
+          <span class="badge support" id="supportBadge" style="display:none">
+            <i class="fas fa-headset"></i> Support Assistant
+          </span>
         </div>
       </div>
 
@@ -68,7 +73,10 @@
             <div class="ava"><i class="fas fa-user-circle"></i></div>
             <div>
               <h3>PMERIT AI:</h3>
-              <p id="welcomeCopy">Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible, high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?</p>
+              <p id="welcomeCopy">
+                Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible,
+                high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?
+              </p>
             </div>
           </article>
         </div>
@@ -78,9 +86,15 @@
           <div class="input-bar">
             <span class="count" id="count">0/1000</span>
             <div class="input-actions">
-              <button class="nav-btn" id="vhQuick" type="button"><i class="fas fa-user-astronaut"></i> VH Mode</button>
-              <button class="nav-btn" id="readAbout" type="button"><i class="fas fa-book"></i> Read About</button>
-              <span class="footer-status"><i class="fas fa-circle-check"></i> Connected to Educational Services</span>
+              <button class="nav-btn" id="vhQuick" type="button">
+                <i class="fas fa-user-astronaut"></i> VH Mode
+              </button>
+              <button class="nav-btn" id="readAbout" type="button">
+                <i class="fas fa-book"></i> Read About
+              </button>
+              <span class="footer-status">
+                <i class="fas fa-circle-check"></i> Connected to Educational Services
+              </span>
             </div>
             <button class="send" id="sendBtn" type="button">Send <i class="fas fa-paper-plane"></i></button>
           </div>
@@ -98,32 +112,31 @@
       </div>
     </section>
 
-    <!-- Mobile accordions -->
-    <div id="mobileAccordions" aria-label="Mobile sections">
-      <!-- Quick Actions (exists already) -->
+    <!-- Mobile-only accordions (≤1100px), matches blueprint layout -->
+    <div id="mobileAccordions">
       <details class="mobile-accordion" id="m_quickActions">
         <summary><i class="fas fa-bolt"></i> Quick Actions</summary>
-        <div class="mobile-accordion-content">
-          <div class="mobile-grid">
-            <button class="mobile-card" id="m_vhToggle" type="button"><i class="fas fa-user-astronaut"></i><span>Virtual Human</span></button>
-            <button class="mobile-card" id="m_careerPaths" type="button"><i class="fas fa-compass"></i><span>Career Tracks</span></button>
-            <button class="mobile-card" id="m_supportToggle" type="button"><i class="fas fa-headset"></i><span>Support Mode</span></button>
-            <button class="mobile-card" id="m_settings" type="button"><i class="fas fa-sliders-h"></i><span>Settings</span></button>
-          </div>
-          <button class="dashboard guest nav-btn" id="m_dashBtn" style="margin-top:1rem;width:100%" type="button"><i class="fas fa-gauge-high"></i> Dashboard</button>
-        </div>
-      </details>
-
-      <!-- NEW: Discover Your Path (to match mobile blueprint) -->
-      <details class="mobile-accordion" id="m_discover">
-        <summary><i class="fas fa-graduation-cap"></i> Discover Your Path</summary>
-        <div class="mobile-accordion-content">
-          <div class="discover" style="margin:0">
-            <h4>Personalized learning plan</h4>
-            <p>Start a short flow that blends learning style, interests, and skills into a plan.</p>
-            <button class="nav-btn primary" id="m_beginAssessment" type="button">Begin Assessment</button>
-            <div class="insights" id="m_insights">Tip: Short, daily practice beats long, rare sessions.</div>
-          </div>
+        <div class="mobile-accordion-content mobile-grid">
+          <button class="mobile-card" id="m_vhToggle" type="button">
+            <i class="fas fa-user-astronaut"></i>
+            <div>Virtual Human</div>
+          </button>
+          <button class="mobile-card" id="m_supportToggle" type="button">
+            <i class="fas fa-headset"></i>
+            <div>Support Mode</div>
+          </button>
+          <button class="mobile-card" id="m_careerPaths" type="button">
+            <i class="fas fa-compass"></i>
+            <div>Career Tracks</div>
+          </button>
+          <button class="mobile-card" id="m_settings" type="button">
+            <i class="fas fa-sliders-h"></i>
+            <div>Settings</div>
+          </button>
+          <button class="mobile-card guest" id="m_dashBtn" type="button">
+            <i class="fas fa-gauge-high"></i>
+            <div>Dashboard</div>
+          </button>
         </div>
       </details>
     </div>
@@ -133,7 +146,9 @@
   <aside id="right" aria-label="Help and actions">
     <div class="support-assistant" id="supportCard">
       <h4><i class="fas fa-life-ring"></i> We’re here to help</h4>
-      <p style="margin:.5rem 0 1rem;color:var(--text-secondary)">Switch to Support Assistant for account, enrollment, or technical issues.</p>
+      <p style="margin:.5rem 0 1rem;color:var(--text-secondary)">
+        Switch to Support Assistant for account, enrollment, or technical issues.
+      </p>
       <div style="display:flex;gap:.5rem;justify-content:center">
         <button class="nav-btn" id="supportShort" type="button"><i class="fas fa-headset"></i> Support Mode</button>
         <button class="nav-btn" id="vhShort" type="button"><i class="fas fa-user-astronaut"></i> VH Mode</button>
@@ -144,13 +159,111 @@
     <div class="discover">
       <h4>Personalized plan</h4>
       <p>Take a quick assessment to get a tailored learning plan.</p>
-      <div class="insights" id="insights">Your insights will appear here…</div>
+      <div class="insights" id="pathInsights">Your insights will appear here…</div>
       <div style="display:flex;gap:.5rem;margin-top:.75rem">
-        <button class="nav-btn primary" id="assessmentBtn" type="button"><i class="fas fa-graduation-cap"></i> Start Assessment</button>
-        <button class="nav-btn" id="aboutBtnRight" type="button"><i class="fas fa-book"></i> Read About</button>
+        <button class="nav-btn primary" id="assessmentBtn" type="button">
+          <i class="fas fa-graduation-cap"></i> Start Assessment
+        </button>
+        <button class="nav-btn" id="aboutBtnRight" type="button">
+          <i class="fas fa-book"></i> Read About
+        </button>
       </div>
     </div>
   </aside>
 </div>
 
-<!-- Modals unchanged (SignUp/SignIn/Voices/Tracks/Assessment) -->
+<!-- ===== MODALS (canonical IDs for JS bindings) ===== -->
+
+<!-- Sign Up Modal -->
+<dialog id="signUpModal" aria-modal="true">
+  <form method="dialog">
+    <h3><i class="fas fa-user-plus"></i> Create your PMERIT account</h3>
+    <label>
+      <span>Name</span>
+      <input id="su_name" type="text" required placeholder="Your name"/>
+    </label>
+    <label>
+      <span>Email</span>
+      <input id="su_email" type="email" required placeholder="you@example.com"/>
+    </label>
+    <label>
+      <span>Password</span>
+      <input id="su_pwd" type="password" required placeholder="••••••••"/>
+    </label>
+    <div class="button-group">
+      <button class="nav-btn" id="signUpCancel" type="button">Cancel</button>
+      <button class="nav-btn primary" id="signUpCreate" type="button">Create account</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Sign In Modal -->
+<dialog id="signInModal" aria-modal="true">
+  <form method="dialog">
+    <h3><i class="fas fa-right-to-bracket"></i> Sign in to PMERIT</h3>
+    <label>
+      <span>Email</span>
+      <input id="si_email" type="email" required placeholder="you@example.com"/>
+    </label>
+    <label>
+      <span>Password</span>
+      <input id="si_pwd" type="password" required placeholder="••••••••"/>
+    </label>
+    <div style="margin-top:0.75rem">
+      New here?
+      <a href="#" onclick="signInModal.close();signUpModal.showModal();return false;">Create an account</a>
+    </div>
+    <div class="button-group">
+      <button class="nav-btn" id="signInCancel" type="button">Cancel</button>
+      <button class="nav-btn primary" id="signInGo" type="button">Sign In</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Voices Modal -->
+<dialog id="voicesModal" aria-modal="true">
+  <form method="dialog">
+    <h3><i class="fas fa-headphones"></i> Voice Sampler</h3>
+    <label>
+      <span>Sample text</span>
+      <textarea id="voiceText" rows="3" style="border:1px solid var(--border-color);border-radius:0.5rem;padding:0.75rem;font-family:inherit;">
+Welcome to PMERIT. Empowering learning through innovation.
+      </textarea>
+    </label>
+    <div class="button-group" style="margin-top: 1rem;">
+      <button class="nav-btn" id="browserTts" type="button">Browser TTS</button>
+      <button class="nav-btn" id="voicesClose" type="button">Close</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Career Tracks Modal -->
+<dialog id="tracksModal" aria-modal="true">
+  <div style="margin:0;padding:1.5rem">
+    <h3><i class="fas fa-compass"></i> Explore Career Tracks</h3>
+    <div class="tracks-grid" id="tracksList"></div>
+    <div id="trackDetail" style="margin-top:1rem;display:none;border-top:1px solid var(--border-color);padding-top:1rem"></div>
+    <div class="button-group">
+      <button class="nav-btn" id="tracksClose" type="button">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Assessment Modal -->
+<dialog id="assessmentModal" aria-modal="true">
+  <div style="margin:0;padding:1.5rem">
+    <h3><i class="fas fa-graduation-cap"></i> Discover Your Path — Quick Assessment</h3>
+    <ol style="line-height:1.6;margin:0 0 1rem 1.25rem">
+      <li><strong>Learning style:</strong> a few preferences.</li>
+      <li><strong>Interests:</strong> choose areas you enjoy.</li>
+      <li><strong>Skills:</strong> rate comfort with common tools.</li>
+    </ol>
+    <p style="color:var(--text-secondary);margin:0 0 1rem">
+      This assessment will help us create a personalized learning plan based on your preferences.
+    </p>
+    <div class="button-group">
+      <button class="nav-btn" id="assessmentCancel" type="button">Cancel</button>
+      <button class="nav-btn primary" id="assessmentStart" type="button">Start</button>
+    </div>
+  </div>
+</dialog>
