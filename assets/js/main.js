@@ -204,6 +204,13 @@
     $('startBtn')?.addEventListener('click', openAssessment);
     $('beginAssessment')?.addEventListener('click', openAssessment);
     $('m_beginAssessment')?.addEventListener('click', openAssessment);
+    
+    // New mobile assessment buttons
+    $('m_startAssessment')?.addEventListener('click', openAssessment);
+    $('m_skillEvaluation')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','Skill evaluation helps identify your current strengths and areas for improvement. This assessment adapts to your responses to create a personalized learning plan.'));
+    $('m_learningPath')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','Your personalized learning path will be created based on your assessment results. This includes recommended courses, projects, and milestones to achieve your goals.'));
+    $('m_progress')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','Track your learning progress with detailed analytics. Monitor completion rates, skill development, and achievements as you advance through your chosen path.'));
+    
     $('assessmentCancel')?.addEventListener('click', ()=>$('assessmentModal')?.close?.());
     $('assessmentStart')?.addEventListener('click', ()=>{
       $('assessmentModal')?.close?.();

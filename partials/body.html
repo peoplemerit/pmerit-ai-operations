@@ -54,6 +54,11 @@
 
   <!-- Center -->
   <main>
+    <!-- Hero section for mobile -->
+    <div class="hero-section">
+      <h1 class="hero-title">Empowering Learning Through Innovation</h1>
+    </div>
+
     <section class="panel" aria-label="Chat panel">
       <div class="panel-head">
         <div class="badges">
@@ -72,7 +77,7 @@
           <article class="bubble" id="welcomeMsg">
             <div class="ava"><i class="fas fa-user-circle"></i></div>
             <div>
-              <h3>PMERIT AI:</h3>
+              <h3>Gabriel AI:</h3>
               <p id="welcomeCopy">
                 Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible,
                 high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?
@@ -136,6 +141,28 @@
           <button class="mobile-card guest" id="m_dashBtn" type="button">
             <i class="fas fa-gauge-high"></i>
             <div>Dashboard</div>
+          </button>
+        </div>
+      </details>
+
+      <details class="mobile-accordion" id="m_assessments">
+        <summary><i class="fas fa-brain"></i> Assessments</summary>
+        <div class="mobile-accordion-content mobile-grid">
+          <button class="mobile-card" id="m_startAssessment" type="button">
+            <i class="fas fa-graduation-cap"></i>
+            <div>Start Assessment</div>
+          </button>
+          <button class="mobile-card" id="m_skillEvaluation" type="button">
+            <i class="fas fa-chart-line"></i>
+            <div>Skill Evaluation</div>
+          </button>
+          <button class="mobile-card" id="m_learningPath" type="button">
+            <i class="fas fa-route"></i>
+            <div>Learning Path</div>
+          </button>
+          <button class="mobile-card" id="m_progress" type="button">
+            <i class="fas fa-trophy"></i>
+            <div>Progress</div>
           </button>
         </div>
       </details>

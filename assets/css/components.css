@@ -369,10 +369,61 @@ textarea:focus {
 
 /* Ensure mobile accordions appear and layout matches blueprint */
 @media (max-width:1100px) {
+  /* Chat interface improvements */
+  .panel {
+    margin: .75rem;
+    border-radius: 16px;
+  }
+  
+  .bubble {
+    padding: 1rem;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+  }
+  
+  .bubble h3 {
+    color: var(--primary);
+    margin-bottom: .5rem;
+    font-size: 1.1rem;
+  }
+  
+  .chat-input {
+    padding: 1rem;
+  }
+  
+  textarea {
+    min-height: 90px;
+    padding: .9rem;
+    font-size: 1rem;
+    border-radius: .75rem;
+  }
+  
+  .input-bar {
+    margin-top: .6rem;
+    gap: .75rem;
+  }
+  
+  .input-actions .nav-btn {
+    padding: .6rem .9rem;
+    font-size: .9rem;
+    min-height: 44px;
+    border-radius: .5rem;
+  }
+  
+  .send {
+    padding: .7rem 1.2rem;
+    font-size: 1rem;
+    min-height: 44px;
+    border-radius: .6rem;
+  }
+
   #mobileAccordions {
     display: block;
     margin: 0 1rem 1rem;
   }
+  
   .mobile-accordion {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -381,6 +432,7 @@ textarea:focus {
     margin-bottom: 1rem;
     overflow: hidden;
   }
+  
   .mobile-accordion summary {
     padding: 1.25rem;
     cursor: pointer;
@@ -391,7 +443,18 @@ textarea:focus {
     transition: var(--transition);
     position: relative;
     padding-right: 2.25rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    min-height: 44px;
   }
+  
+  .mobile-accordion summary i {
+    color: var(--primary);
+    font-size: 1.2rem;
+  }
+  
   .mobile-accordion summary::after {
     content: "▾";
     position: absolute;
@@ -401,36 +464,54 @@ textarea:focus {
     font-size: 1rem;
     color: var(--text-secondary);
   }
+  
   .mobile-accordion[open] summary::after {
     content: "▴";
   }
+  
   .mobile-accordion-content {
     padding: 1.25rem;
   }
+  
   .mobile-grid {
     display: grid;
     gap: 1rem;
     grid-template-columns: 1fr 1fr;
   }
+  
   .mobile-card {
     background: rgba(37,99,235,.06);
     border: 1px solid rgba(37,99,235,.18);
     border-radius: 8px;
-    padding: .875rem;
+    padding: 1.2rem;
     text-align: center;
     cursor: pointer;
     transition: var(--transition);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: .4rem;
-    min-height: 78px;
+    gap: .6rem;
+    min-height: 88px;
     justify-content: center;
+    font-weight: 500;
   }
+  
+  .mobile-card i {
+    font-size: 1.5rem;
+    color: var(--primary);
+  }
+  
+  .mobile-card div {
+    font-size: .9rem;
+    color: var(--text-primary);
+  }
+  
   .mobile-card:hover {
     background-color: rgba(37,99,235,.1);
     transform: translateY(-1px);
+    box-shadow: var(--shadow);
   }
+  
   footer {
     flex-direction: column;
     gap: .75rem;
@@ -438,15 +519,24 @@ textarea:focus {
     padding: 1rem;
     row-gap: .5rem;
   }
+  
   .footer-links {
     flex-wrap: wrap;
     justify-content: center;
-    gap: .75rem;
+    gap: .8rem;
   }
+  
+  .footer-links .nav-btn {
+    padding: .6rem 1rem;
+    font-size: .9rem;
+    min-height: 44px;
+  }
+  
   .footer-status-main {
     order: 2;
     font-size: .85rem;
   }
+  
   .footer-links {
     order: 1;
   }
