@@ -1,12 +1,25 @@
-<!-- /assets/js/main.js -->
-<script>
-// ------ Define PMERIT_INIT first (idempotent) ------
+// --- Idempotent PMERIT_INIT boot after partials ---
+(function(){
+  function safeInit(){
+    try {
+      if (typeof window.PMERIT_INIT === 'function') window.PMERIT_INIT();
+    } catch(e) {
+      console.error("[main.js] Error running PMERIT_INIT:", e);
+    }
+  }
+  if (document.documentElement.dataset.partialsReady === '1') {
+    safeInit();
+  } else {
+    document.addEventListener('partials:ready', safeInit, { once: true });
+  }
+})();
+
 (function () {
-  // Global, shared state
   window.state = { auth:false, dark:false, vh:false, support:false, tts:false, lang:'en' };
 
-  const $ = (id) => { try { return document.getElementById(id) || null; } catch { return null; } };
-  const save = (k,v)=>{ try{ localStorage.setItem(k,String(v)); }catch{} };
+  const $ = (id) => {
+    try { return document.getElementById(id) || null; } catch { return null; }
+  };
 
   const TRACKS = [
     {k:'fullstack', name:'Software Development (Full-stack)', blurb:'Front-end + back-end foundations with project practice.'},
@@ -18,9 +31,11 @@
     {k:'cloud',     name:'Cloud & DevOps (Intro)',           blurb:'Cloud basics, CI/CD, containers overview.'},
   ];
 
+  const save = (k,v)=>{ try{ localStorage.setItem(k,String(v)); }catch{} };
+
   function updateDashboardVisual(){
-    $('dashBtn')?.classList.toggle('guest', !state.auth);
-    $('m_dashBtn')?.classList.toggle('guest', !state.auth);
+    const d = $('dashBtn'); if (d) d.classList.toggle('guest', !state.auth);
+    const md = $('m_dashBtn'); if (md) md.classList.toggle('guest', !state.auth);
   }
 
   function initState(){
@@ -37,58 +52,115 @@
     updateDashboardVisual();
   }
 
-  function setDark(on){ $('darkToggle')?.classList.toggle('active', on); state.dark = on; document.body.classList.toggle('dark', on); save('pmerit_dark', on); }
-  function setTTS(on){ $('ttsToggle')?.classList.toggle('active', on); state.tts = on; save('pmerit_tts', on); if (!on && 'speechSynthesis' in window) speechSynthesis.cancel(); }
+  function setDark(on){
+    const darkToggle = $('darkToggle');
+    if (darkToggle) darkToggle.classList.toggle('active', on);
+    state.dark = on;
+    document.body.classList.toggle('dark', on);
+    save('pmerit_dark', on);
+  }
+  function setTTS(on){
+    const ttsToggle = $('ttsToggle');
+    if (ttsToggle) ttsToggle.classList.toggle('active', on);
+    state.tts = on;
+    save('pmerit_tts', on);
+    if (!on && 'speechSynthesis' in window) speechSynthesis.cancel();
+  }
   function setSupport(on){
-    $('supportToggle')?.classList.toggle('active', on);
-    $('m_supportToggle')?.classList.toggle('active', on);
+    const supportToggle = $('supportToggle');
+    if (supportToggle) supportToggle.classList.toggle('active', on);
+    const mSupportToggle = $('m_supportToggle');
+    if (mSupportToggle) mSupportToggle.classList.toggle('active', on);
     state.support = on;
-    const b = $('supportBadge'); if (b) b.style.display = on ? 'inline-flex' : 'none';
-    const w = $('welcomeCopy'); if (w) w.textContent = on
+    const b = $('supportBadge');
+    if (b) b.style.display = on ? 'inline-flex' : 'none';
+    const w = $('welcomeCopy');
+    if (w) w.textContent = on
       ? "Welcome to PMERIT Support. I can help with accounts, enrollment, and technical issues. How can I assist you today?"
-      : "Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible, high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?";
+      : "Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible, high-quality education that opens doors to endless opportunities. How can I help you discover new skills or career paths?";
   }
   function setVH(on){
-    $('vhToggle')?.classList.toggle('active', on);
-    $('m_vhToggle')?.classList.toggle('active', on);
+    const vhToggle = $('vhToggle');
+    if (vhToggle) vhToggle.classList.toggle('active', on);
+    const mVhToggle = $('m_vhToggle');
+    if (mVhToggle) mVhToggle.classList.toggle('active', on);
     state.vh = on;
-    const textChat=$('textChat'), stage=$('vhStage'), ava=$('vhAvatar'), badge=$('vhBadge');
-    if (on){ textChat && (textChat.style.display='none'); stage && (stage.style.display='flex'); ava?.classList.add('active'); if (badge) badge.style.display='inline-flex'; $('captions') && ( $('captions').textContent="Virtual Human is speaking…"); }
-    else   { stage && (stage.style.display='none'); textChat && (textChat.style.display='flex'); ava?.classList.remove('active'); if (badge) badge.style.display='none'; }
+    const textChat = $('textChat'),
+      stage = $('vhStage'),
+      ava = $('vhAvatar'),
+      badge = $('vhBadge');
+    if (on){
+      if (textChat) textChat.style.display = 'none';
+      if (stage) stage.style.display = 'flex';
+      if (ava) ava.classList.add('active');
+      if (badge) badge.style.display = 'inline-flex';
+      const captions = $('captions');
+      if (captions) captions.textContent = "Virtual Human is speaking…";
+    } else {
+      if (stage) stage.style.display = 'none';
+      if (textChat) textChat.style.display = 'flex';
+      if (ava) ava.classList.remove('active');
+      if (badge) badge.style.display = 'none';
+    }
   }
-  function goDashboard(){ state.auth ? (location.href='dashboard.html') : $('signUpModal')?.showModal?.(); }
+  function goDashboard(){
+    if (state.auth) location.href = 'dashboard.html';
+    else $('signUpModal')?.showModal?.();
+  }
   function openAssessment(){ $('assessmentModal')?.showModal?.(); }
 
   function renderTracks(){
-    const list=$('tracksList'), detail=$('trackDetail'); if(!list||!detail) return;
-    list.innerHTML=''; detail.style.display='none';
+    const list = $('tracksList');
+    const detail = $('trackDetail');
+    if (!list || !detail) return;
+    list.innerHTML = '';
+    detail.style.display = "none";
     TRACKS.forEach(t=>{
-      const card=document.createElement('div');
-      card.className='track-card';
-      card.innerHTML=`<h4>${t.name}</h4><p>${t.blurb}</p>`;
+      const card = document.createElement('div');
+      card.className = 'track-card';
+      card.innerHTML = `<h4>${t.name}</h4><p>${t.blurb}</p>`;
       card.addEventListener('click', ()=>{
-        detail.style.display='block';
-        detail.innerHTML=`
+        detail.style.display = 'block';
+        detail.innerHTML = `
           <h4 style="margin:.25rem 0">${t.name}</h4>
           <p style="color:var(--text-secondary);margin:.5rem 0">${t.blurb}</p>
           <button class="nav-btn primary" type="button" id="trackCta">See sample plan</button>`;
-        $('trackCta')?.addEventListener('click', ()=>{ $('tracksModal')?.close?.(); openAssessment(); });
+        const trackCta = $('trackCta');
+        if (trackCta) {
+          trackCta.addEventListener('click', ()=>{
+            $('tracksModal')?.close?.();
+            openAssessment();
+          });
+        }
       });
       list.appendChild(card);
     });
   }
 
   function wireEvents(){
-    // Left pane
+    // --- Left panel toggles ---
     $('vhToggle')?.addEventListener('click', ()=>setVH(!$('vhToggle').classList.contains('active')));
-    $('careerPaths')?.addEventListener('click', ()=>{ renderTracks(); $('tracksModal')?.showModal?.(); });
+    $('careerPaths')?.addEventListener('click', ()=>{
+      renderTracks();
+      $('tracksModal')?.showModal?.();
+    });
     $('supportToggle')?.addEventListener('click', ()=>setSupport(!$('supportToggle').classList.contains('active')));
 
-    // Settings box
-    const box=$('settingsBox'); const head=box?.querySelector('.head'); const body=box?.querySelector('.body');
-    if (head && body){ body.style.display='none'; head.addEventListener('click', ()=>{ const open=body.style.display==='block'; body.style.display=open?'none':'block'; const ico=head.querySelector('i.fas'); if(ico) ico.className=open?'fas fa-sliders-h':'fas fa-chevron-down'; }); }
+    // Settings collapsible (show/hide settings body, toggle icon)
+    const box = $('settingsBox');
+    const head = box?.querySelector('.head'), body = box?.querySelector('.body');
+    if (head && body) {
+      // Always start hidden
+      body.style.display = "none";
+      head.addEventListener('click', ()=>{
+        const open = body.style.display === 'block';
+        body.style.display = open ? 'none' : 'block';
+        const ico = head.querySelector('i.fas');
+        if (ico) ico.className = open ? 'fas fa-sliders-h' : 'fas fa-chevron-down';
+      });
+    }
 
-    // Toggles + quick actions
+    // --- Other toggles and actions ---
     $('darkToggle')?.addEventListener('click', ()=>setDark(!state.dark));
     $('ttsToggle')?.addEventListener('click', ()=>setTTS(!state.tts));
     $('supportShort')?.addEventListener('click', ()=>setSupport(true));
@@ -106,23 +178,31 @@
     $('signInBtn')?.addEventListener('click', ()=>$('signInModal')?.showModal?.());
     $('signInCancel')?.addEventListener('click', ()=>$('signInModal')?.close?.());
     $('signInGo')?.addEventListener('click', ()=>{
-      const email=$('si_email')?.value.trim(), pwd=$('si_pwd')?.value.trim();
+      const email = $('si_email')?.value.trim();
+      const pwd = $('si_pwd')?.value.trim();
       if(!email||!pwd){ alert('Please enter your email and password.'); return; }
-      state.auth=true; save('pmerit_auth',true); updateDashboardVisual(); $('signInModal')?.close?.();
+      state.auth = true;
+      save('pmerit_auth',true);
+      updateDashboardVisual();
+      $('signInModal')?.close?.();
       window.PMERIT_CHAT?.addMessage('PMERIT AI','Welcome back! Your account has been successfully signed in. You now have access to your personal dashboard and can track your learning progress.');
     });
     $('signUpCancel')?.addEventListener('click', ()=>$('signUpModal')?.close?.());
     $('signUpCreate')?.addEventListener('click', ()=>{
-      const name=$('su_name')?.value.trim(), email=$('su_email')?.value.trim(), pwd=$('su_pwd')?.value.trim();
+      const name = $('su_name')?.value.trim();
+      const email = $('su_email')?.value.trim();
+      const pwd = $('su_pwd')?.value.trim();
       if(!name||!email||!pwd){ alert('Please complete all fields.'); return; }
-      state.auth=true; save('pmerit_auth',true); updateDashboardVisual(); $('signUpModal')?.close?.();
+      state.auth = true;
+      save('pmerit_auth',true);
+      updateDashboardVisual();
+      $('signUpModal')?.close?.();
       window.PMERIT_CHAT?.addMessage('PMERIT AI',`Welcome to PMERIT, ${name}! Your account has been created successfully. You now have access to personalized learning paths and can track your progress.`);
     });
 
-    // Assessment (bind ALL ids we use anywhere)
+    // Assessment
     $('startBtn')?.addEventListener('click', openAssessment);
     $('beginAssessment')?.addEventListener('click', openAssessment);
-    $('assessmentBtn')?.addEventListener('click', openAssessment);
     $('m_beginAssessment')?.addEventListener('click', openAssessment);
     $('assessmentCancel')?.addEventListener('click', ()=>$('assessmentModal')?.close?.());
     $('assessmentStart')?.addEventListener('click', ()=>{
@@ -138,31 +218,37 @@
     // Chat
     $('chatInput')?.addEventListener('input', ()=>{ const c=$('count'); if (c) c.textContent = `${$('chatInput').value.length}/1000`; });
     $('sendBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.sendMessage());
-    $('chatInput')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); window.PMERIT_CHAT?.sendMessage(); } });
+    $('chatInput')?.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter' && !e.shiftKey){
+        e.preventDefault();
+        window.PMERIT_CHAT?.sendMessage();
+      }
+    });
 
     // Mobile career paths
-    $('m_careerPaths')?.addEventListener('click', ()=>{ renderTracks(); $('tracksModal')?.showModal?.(); });
+    $('m_careerPaths')?.addEventListener('click', ()=>{
+      renderTracks();
+      $('tracksModal')?.showModal?.();
+    });
+
     $('tracksClose')?.addEventListener('click', ()=>$('tracksModal')?.close?.());
 
-    // Voices + footer + About
+    // Voices + footer
     $('voicesBtn')?.addEventListener('click', ()=>$('voicesModal')?.showModal?.());
     $('voicesClose')?.addEventListener('click', ()=>$('voicesModal')?.close?.());
     $('browserTts')?.addEventListener('click', ()=>{
-      const txt=$('voiceText')?.value.trim(); if(!txt) return;
+      const txt = $('voiceText')?.value.trim();
+      if(!txt) return;
       if(!('speechSynthesis' in window)) { alert('Browser TTS not supported.'); return; }
-      speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(txt));
+      speechSynthesis.cancel();
+      speechSynthesis.speak(new SpeechSynthesisUtterance(txt));
     });
 
-    $('privacyBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','Our Privacy & Terms page provides detailed information about how we protect your data and our terms of service.'));
+    $('privacyBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','Our Privacy & Terms page provides detailed information about how we protect your data and our terms of service. If you have any specific concerns, I can answer them here.'));
     $('contactBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','You can contact our support team through this chat interface, or reach out via email at support@pmerit.co.'));
-    $('partnershipsBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT partners with leading educational institutions and industry organizations to provide comprehensive learning experiences.'));
-    $('supportBtn')?.addEventListener('click', ()=>{ setSupport(true); window.PMERIT_CHAT?.addMessage('PMERIT AI',"Support mode activated! I'm ready to help with any technical issues, account questions, or course recommendations."); });
+    $('partnershipsBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT partners with leading educational institutions and industry organizations to provide comprehensive learning experiences. Interested? Let us know!'));
+    $('supportBtn')?.addEventListener('click', ()=>{ setSupport(true); window.PMERIT_CHAT?.addMessage('PMERIT AI',"Support mode activated! I'm now ready to help you with any technical issues, account questions, or course recommendations.") });
 
-    // About (footer + right panel)
-    $('aboutBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT — Accessible Global Education. Our platform blends AI guidance with curated curricula to help learners transition into in-demand roles.'));
-    $('aboutBtnRight')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT — Accessible Global Education. Our platform blends AI guidance with curated curricula to help learners transition into in-demand roles.'));
-    
-    // Tips
     const tips=[
       "Pro tip: Keep notes in your own words for better recall.",
       "Short, frequent study sessions are more effective than long cramming sessions.",
@@ -172,28 +258,24 @@
     ];
     const rotate=(el)=>{ if(!el) return; let i=0; el.textContent=tips[0]; setInterval(()=>{ i=(i+1)%tips.length; el.textContent=tips[i]; },5000); };
     rotate($('insights')); rotate($('m_insights'));
-    $('lang')?.addEventListener('change', function(){ state.lang=this.value; save('pmerit_lang',state.lang); window.PMERIT_CHAT?.addMessage('PMERIT AI',`Language changed to ${this.options[this.selectedIndex].text}.`); });
-    $('pricingBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT offers flexible pricing plans—free options plus premium subscriptions for advanced content and support.'));
+
+    $('lang')?.addEventListener('change', function(){
+      state.lang = this.value;
+      save('pmerit_lang',state.lang);
+      window.PMERIT_CHAT?.addMessage('PMERIT AI',`Language changed to ${this.options[this.selectedIndex].text}`);
+    });
+    $('pricingBtn')?.addEventListener('click', ()=>window.PMERIT_CHAT?.addMessage('PMERIT AI','PMERIT offers flexible pricing plans to make education accessible to everyone. We have free courses available as well as premium subscriptions for advanced content.'));
   }
 
-  // Expose init
-  window.PMERIT_INIT = function init(){
-    if (!$('body-container')) return; // safety
+  function init(){
+    if (!$('body-container')) return;
     initState();
     wireEvents();
-  };
-})();
-  
-// ------ Readiness shim (runs AFTER PMERIT_INIT is defined) ------
-(function(){
-  function run(){ try{ window.PMERIT_INIT && window.PMERIT_INIT(); }catch(e){ console.error('[main.js] PMERIT_INIT error:', e); } }
-  // If boot already marked partials ready, init immediately; otherwise wait for the correct event
-  if (document.documentElement.getAttribute('data-partials-ready') === '1') {
-    run();
-  } else {
-    document.addEventListener('partials:ready', run, { once:true });
   }
-  // Final fallback (in case neither path triggers)
-  document.addEventListener('DOMContentLoaded', ()=> setTimeout(run, 0), { once:true });
+
+  window.PMERIT_INIT = init;
+  document.addEventListener('partials:loaded', init, { once:true });
+
+  if (document.readyState === 'complete') init();
+  else document.addEventListener('DOMContentLoaded', ()=>setTimeout(init,0));
 })();
-</script>
