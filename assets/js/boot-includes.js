@@ -1,37 +1,89 @@
 // assets/js/boot-includes.js
-// Load header/body/footer partials, then signal main init. Robust to network/cache.
+// Loads header/body/footer partials, then signals the app to initialize.
+// Robust to network/cache issues and missing containers.
 
-(async function () {
-  async function loadPartial(targetId, url) {
-    const host = document.getElementById(targetId);
-    if (!host) return;
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`Failed to load ${url}: ${res.status}`);
-    host.innerHTML = await res.text();
+(() => {
+  const PARTIALS = [
+    { host: 'header-container', url: 'partials/header.html' },
+    { host: 'body-container',   url: 'partials/body.html'   },
+    { host: 'footer-container', url: 'partials/footer.html' },
+  ];
+
+  // Small utility: safe log group
+  const log = (...a) => console.log('[boot-includes]', ...a);
+  const warn = (...a) => console.warn('[boot-includes]', ...a);
+  const err = (...a) => console.error('[boot-includes]', ...a);
+
+  async function loadPartial({ host, url }) {
+    const mount = document.getElementById(host);
+    if (!mount) {
+      warn(`Missing mount #${host}. Skipping ${url}.`);
+      return { host, url, ok: false, reason: 'missing-mount' };
+    }
+
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status} for ${url}`);
+      }
+      const html = await res.text();
+      mount.innerHTML = html;
+      return { host, url, ok: true };
+    } catch (e) {
+      err(`Failed to load ${url}:`, e);
+      // Leave a tiny placeholder so devs see something in DOM while not crashing
+      mount.innerHTML = `<!-- failed to load: ${url} -->`;
+      return { host, url, ok: false, reason: e.message || 'fetch-failed' };
+    }
+  }
+
+  function signalReady(results) {
+    try {
+      // Mark on <html> so CSS/other scripts can gate on it if needed
+      document.documentElement.setAttribute('data-partials-ready', '1');
+
+      const evt = new CustomEvent('partials:ready', { detail: { results } });
+      document.dispatchEvent(evt);
+      log('Dispatched event "partials:ready".', results);
+
+      // Optional direct init (if app exposes it)
+      if (typeof window.PMERIT_INIT === 'function') {
+        try {
+          window.PMERIT_INIT();
+          log('Called window.PMERIT_INIT()');
+        } catch (e) {
+          err('Error in window.PMERIT_INIT():', e);
+        }
+      }
+    } catch (e) {
+      err('Error dispatching partials:ready:', e);
+    }
   }
 
   async function boot() {
-    try {
-      await Promise.all([
-        loadPartial("header-container", "partials/header.html"),
-        loadPartial("body-container",   "partials/body.html"),
-        loadPartial("footer-container", "partials/footer.html"),
-      ]);
-    } catch (e) {
-      console.error(e);
-    }
-
-    // Prefer direct call; fall back to event for safety
-    if (typeof window.PMERIT_INIT === "function") {
-      window.PMERIT_INIT();
-    } else {
-      document.dispatchEvent(new Event("partials:loaded"));
-    }
+    log('Starting partial loads…');
+    const results = [];
+    // Load in parallel but preserve result order for easier reading
+    await Promise.all(
+      PARTIALS.map(async (p, i) => (results[i] = await loadPartial(p)))
+    );
+    signalReady(results);
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
+  // Ensure DOM exists before we start touching it
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
   } else {
+    // If script is deferred, DOM is already there
     boot();
   }
+
+  // Safety net: if something blocks DOMContentLoaded, fire after a grace period
+  setTimeout(() => {
+    const flagged = document.documentElement.getAttribute('data-partials-ready') === '1';
+    if (!flagged) {
+      warn('Grace timeout reached — attempting late boot.');
+      boot();
+    }
+  }, 7000);
 })();
